@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Missions - MissionHub{% endblock %}
+
+{% block content %}
+    <h1>Liste des Missions</h1>
+    <div class="mission-list">
+        {% for mission in missions %}
+            <div class="mission-card">
+                <h2>{{ mission.title }}</h2>
+                <p>{{ mission.description }}</p>
+                <div class="mission-details">
+                    <span><strong>Catégorie :</strong> {{ mission.get_category_display }}</span>
+                    <span><strong>Difficulté:</strong> {{ mission.get_difficulty_display }}</span>
+                    <span><strong>Récompense:</strong> {{ mission.reward }} π</span>
+                </div>
+                <a href="{% url 'choose_mission' mission.id %}" class="button-primary">Choisir cette mission</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+

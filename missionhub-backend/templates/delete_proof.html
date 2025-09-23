@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirmer la suppression{% endblock %}
+
+{% block content %}
+    <h1>Supprimer la preuve</h1>
+    <p>Êtes-vous sûr de vouloir supprimer votre preuve pour la mission "{{ proof.session.mission.title }}" ?</p>
+    <p>Cette action est irréversible.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="button-danger">Oui, supprimer</button>
+        <a href="{% url 'mission_detail' proof.session.mission.id %}" class="button">Annuler</a>
+    </form>
+{% endblock %}
+

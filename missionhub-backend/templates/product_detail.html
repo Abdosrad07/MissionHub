@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - Marketplace{% endblock %}
+
+{% block content %}
+    <h1>{{ product.name }}</h1>
+
+    <div class="product-detail-container">
+        <div class="product-detail-image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <div class="placeholder-image">Pas d'image</div>
+            {% endif %}
+        </div>
+        <div class="product-detail-info">
+            <p class="product-price">{{ product.price }} π</p>
+            <p><strong>Vendu par :</strong> {{ product.seller.profile.pseudo }}</p>
+            <hr>
+            <h3>Description</h3>
+            <p>{{ product.description|linebreaksbr }}</p>
+            <hr>
+
+            {% if user.is_authenticated %}
+            {% if user == product.seller %}
+                <p>C'est votre annonce. Vous pouvez gérer vos ventes depuis votre <a href="{% url 'user_profile' %}">page de profil</a>.</p>
+            {% else %}
+                {% if user_purchase %}
+                    <h3>Statut de votre achat :</h3>
+                    <p>
+                        <strong>{{ user_purchase.get_status_display }}</strong>
+                        <small> (le {{ user_purchase.updated_at|date:"d M Y" }})</small>
+                    </p>
+                    <p>Vous pouvez suivre cette transaction sur votre <a href="{% url 'user_profile' %}">page de profil</a>.</p>
+                {% else %}
+                    <button id="buy-button" class="button-primary">Acheter maintenant</button>
+                    <p id="payment-status"></p>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <p><a href="{% url 'login' %}?next={{ request.path }}">Connectez-vous</a> pour acheter ce produit.</p>
+        {% endif %}
+    </div>
+          
+    </div>
+
+    {% if user.is_authenticated and user != product.seller %}
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        document.getElementById('buy-button').addEventListener('click', async function() {
+            const statusEl = document.getElementById('payment-status');
+            statusEl.innerText = "Préparation de la transaction...";
+            this.disabled = true;
+
+            try {
+                // 1. Call our backend to create a Purchase record and get payment details
+                const startResponse = await fetch("{% url 'start_purchase' product.id %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    }
+                });
+
+                if (!startResponse.ok) {
+                    const errorData = await startResponse.json();
+                    throw new Error(errorData.error || "Impossible de démarrer la transaction.");
+                }
+
+                const paymentData = await startResponse.json();
+
+                // 2. Use the data to call the Pi SDK
+                Pi.createPayment({
+                    amount: parseFloat(paymentData.amount),
+                    memo: paymentData.memo,
+                    metadata: paymentData.metadata
+                }, {
+                    onCancel: (paymentId) => { statusEl.innerText = "Transaction annulée."; this.disabled = false; },
+                    onError: (error, payment) => { statusEl.innerText = "Erreur de paiement : " + error.message; this.disabled = false; },
+                });
+
+            } catch (error) {
+                statusEl.innerText = "Erreur : " + error.message;
+                this.disabled = false;
+            }
+        });
+    </script>
+    {% endif %}
+{% endblock %}
+

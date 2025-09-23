@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Créer une annonce{% endblock %}
+
+{% block content %}
+    <h1>Créer une nouvelle annonce</h1>
+    <p>Remplissez les informations ci-dessous pour mettre votre produit en vente sur la marketplace.</p>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button-primary">Publier l'annonce</button>
+    </form>
+{% endblock %}
+

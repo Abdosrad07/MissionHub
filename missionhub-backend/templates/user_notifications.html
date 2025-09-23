@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://sdk.pi-network.com/v2/pi-sdk.js"></script>
+    <script>Pi.init({ version: "2.0", sandbox: true })</script>
+
+</head>
+<body>
+    <h1>Notifications</h1>
+    <ul>
+        {% for notification in notifications %}
+            <li>
+                {{ notification.message }} - {{ notification.created_at }}
+                {% if not notification.is_read %}
+                    <form method="POST" action="{% url 'mark_notification_read' notification.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Mark as Read</button>
+                    </form>
+                {% else %}
+                    <span style="color: green;">Read</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier la preuve{% endblock %}
+
+{% block content %}
+    <h1>Modifier la preuve</h1>
+    <h2>Mission : {{ proof.session.mission.title }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>Photo actuelle :</p>
+        {% if proof.photo %}
+            <img src="{{ proof.photo.url }}" alt="Photo de la preuve" class="proof-photo" style="max-width: 300px; height: auto; margin-bottom: 20px;">
+        {% else %}
+            <p>Pas de photo.</p>
+        {% endif %}
+        <button type="submit" class="button-primary">Enregistrer les modifications</button>
+    </form>
+{% endblock %}

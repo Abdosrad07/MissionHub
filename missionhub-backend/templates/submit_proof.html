@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Soumettre une preuve pour {{ mission.title }}{% endblock %}
+
+{% block content %}
+    <h1>Soumettre une preuve</h1>
+    <h2>Mission : {{ mission.title }}</h2>
+    <p>Veuillez téléverser une photo et indiquer votre localisation pour prouver que vous avez accompli la mission.</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button-primary">Soumettre ma preuve</button>
+    </form>
+{% endblock %}

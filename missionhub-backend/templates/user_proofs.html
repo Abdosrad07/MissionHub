@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes Preuves - MissionHub{% endblock %}
+
+{% block content %}
+    <h1>Mes Preuves Soumises</h1>
+    <p>Voici la liste de toutes les preuves que vous avez soumises pour les missions.</p>
+    <table class="table-styled">
+        <thead>
+            <tr>
+                <th>Mission</th>
+                <th>Photo</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Submitted At</th>
+                <th>Reviewed At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proof in proofs %}
+                <tr>
+                    <td>{{ proof.session.mission.title }}</td>
+                    <td>
+                        <img src="{{ proof.photo.url }}" alt="Proof Photo" class="proof-photo">
+                    </td>
+                    <td>{{ proof.location }}</td>
+                    <td>
+                        <span class="status-{{ proof.status }}">{{ proof.get_status_display }}</span>
+                    </td>
+                    <td>{{ proof.submitted_at }}</td>
+                    <td>{{ proof.reviewed_at|default:"N/A" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon Profil - MissionHub{% endblock %}
+
+{% block content %}
+    <h1>Mon Profil</h1>
+
+    <div class="profile-section">
+        <h2>Informations</h2>
+        <p><strong>Pseudo :</strong> {{ user.profile.pseudo }}</p>
+        <p><strong>Email :</strong> {{ user.email }}</p>
+        <p><strong>Compte Pi lié :</strong> {{ user.profile.pi_uid|default:"Non lié" }}</p>
+    </div>
+
+    <div class="profile-section">
+        <h2>Portefeuille Pi</h2>
+        {% if not user.profile.pi_uid %}
+            <p>Connectez votre compte Pi pour pouvoir retirer vos gains.</p>
+            <button id="pi-auth-button" class="button">Connecter avec Pi</button>
+            <p id="pi-message"></p>
+        {% else %}
+            <p>Votre compte Pi est connecté. Vous pouvez maintenant retirer vos gains.</p>
+        {% endif %}
+
+        <h3 style="margin-top: 2em;">Retirer mes gains</h3>
+        <p>Votre solde : <strong>{{ request.user.profile.solde }} π</strong></p>
+        <form id="withdraw-form">
+            <input type="number" id="withdraw-amount" name="amount" step="0.0000001" placeholder="Montant à retirer" required>
+            <button type="submit" class="button-primary">Retirer en Pi</button>
+        </form>
+    </div>
+
+    <div class="profile-section">
+        <h2>Mes Achats</h2>
+        {% if my_purchases %}
+            <table class="table-styled">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Vendeur</th>
+                        <th>Prix</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for purchase in my_purchases %}
+                        <tr>
+                            <td><a href="{% url 'product_detail' purchase.product.id %}">{{ purchase.product.name }}</a></td>
+                            <td>{{ purchase.seller.profile.pseudo }}</td>
+                            <td>{{ purchase.total_price }} π</td>
+                            <td>{{ purchase.get_status_display }}</td>
+                            <td>
+                                {% if purchase.status == 'shipped' %}
+                                    <form action="{% url 'confirm_receipt' purchase.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button">Confirmer la réception</button>
+                                    </form>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Vous n'avez effectué aucun achat.</p>
+        {% endif %}
+    </div>
+
+    <div class="profile-section">
+        <h2>Mes Ventes</h2>
+        {% if my_sales %}
+            <table class="table-styled">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Acheteur</th>
+                        <th>Statut</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in my_sales %}
+                        <tr>
+                            <td><a href="{% url 'product_detail' sale.product.id %}">{{ sale.product.name }}</a></td>
+                            <td>{{ sale.buyer.profile.pseudo }}</td>
+                            <td>{{ sale.get_status_display }}</td>
+                            <td>
+                                {% if sale.status == 'in_escrow' %}
+                                    <form action="{% url 'mark_shipped' sale.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="button">Marquer comme expédié</button>
+                                    </form>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Vous n'avez réalisé aucune vente.</p>
+        {% endif %}
+    </div>
+
+    <div class="profile-section">
+        <h2>Mes Badges</h2>
+        {% if user_badges %}
+            <div class="badges-container">
+                {% for user_badge in user_badges %}
+                    <div class="badge" title="{{ user_badge.badge.description }}">
+                        <span class="badge-icon">{{ user_badge.badge.icon }}</span>
+                        <span class="badge-name">{{ user_badge.badge.name }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Vous n'avez encore débloqué aucun badge. Accomplissez des missions pour en gagner !</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Logique pour connecter le compte Pi
+        const piAuthButton = document.getElementById('pi-auth-button');
+        if (piAuthButton) {
+            piAuthButton.addEventListener('click', async function() {
+                try {
+                    const scopes = ['username', 'payments'];
+                    const authResult = await Pi.authenticate(scopes, (payment) => { /* onIncompletePayment */ });
+                    
+                    await fetch("{% url 'pi_authenticate' %}", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                        body: JSON.stringify({ uid: authResult.user.uid })
+                    });
+                    
+                    // Recharger la page pour afficher le message de succès et mettre à jour l'UI
+                    window.location.reload();
+
+                } catch (err) {
+                    // Gérer les erreurs du SDK Pi (ex: l'utilisateur ferme la fenêtre)
+                    const piMessage = document.getElementById('pi-message');
+                    if(piMessage) piMessage.innerText = 'Erreur: ' + (err.error || 'L\'authentification a échoué.');
+                }
+            });
+        }
+
+        // Logique pour le retrait
+        document.getElementById('withdraw-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const amount = document.getElementById('withdraw-amount').value;
+            const button = event.target.querySelector('button');
+            button.disabled = true;
+            button.innerText = 'Traitement en cours...';
+
+            await fetch("{% url 'pi_withdraw' %}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                body: JSON.stringify({ amount: amount })
+            });
+            // On recharge la page pour afficher le message de succès/erreur de Django et mettre à jour le solde
+            window.location.reload();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ mission.title }} - MissionHub{% endblock %}
+
+{% block content %}
+    <h1>{{ mission.title }}</h1>
+    <p class="mission-description">{{ mission.description }}</p>
+
+    <div class="mission-details">
+        <span><strong>Catégorie :</strong> {{ mission.get_category_display }}</span>
+        <span><strong>Difficulté :</strong> {{ mission.get_difficulty_display }}</span>
+        <span><strong>Récompense :</strong> {{ mission.reward }} π</span>
+    </div>
+
+    <hr>
+
+    <h2>Soumettre une preuve</h2>
+    <p>Vous avez démarré cette mission. Vous pouvez maintenant soumettre une preuve de sa réalisation.</p>
+    <a href="{% url 'submit_proof' session.id %}" class="button button-primary">Soumettre une nouvelle preuve</a>
+
+    <h2 style="margin-top: 2em;">Vos preuves pour cette mission</h2>
+    {% if proofs %}
+        <table class="table-styled">
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Lieu</th>
+                    <th>Statut</th>
+                    <th>Date de soumission</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proof in proofs %}
+                    <tr>
+                        <td>
+                            {% if proof.photo %}
+                                <img src="{{ proof.photo.url }}" alt="Photo de la preuve" class="proof-photo">
+                            {% else %}
+                                Pas de photo
+                            {% endif %}
+                        </td>
+                        <td>{{ proof.location }}</td>
+                        <td><span class="status-{{ proof.status }}">{{ proof.get_status_display }}</span></td>
+                        <td>{{ proof.submitted_at|date:"d M Y, H:i" }}</td>
+                        <td>
+                            {% if proof.status == 'pending' %}
+                                <a href="{% url 'edit_proof' proof.id %}">Modifier</a> |
+                                <form action="{% url 'delete_proof' proof.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="link-button" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette preuve ?');">Supprimer</button>
+                                </form>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Vous n'avez encore soumis aucune preuve pour cette mission.</p>
+    {% endif %}
+{% endblock %}
+
