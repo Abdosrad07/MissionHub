@@ -577,3 +577,9 @@ def refund_to_buyer(purchase):
         error_message = f"ERREUR DE REMBOURSEMENT PI pour l'achat {purchase.id}: {e}"
         print(error_message)
         return (False, "La communication avec les serveurs Pi a échoué.")
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+
+def terms_of_service(request):
+    return render(request, 'terms_of_service.html')

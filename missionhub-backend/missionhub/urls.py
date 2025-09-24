@@ -27,7 +27,7 @@ from missions.views import (
     RegisterViewSet, CustomTokenObtainPairView, user_proofs, user_notifications, list_missions,
     choose_mission, mission_detail, submit_proof, user_profile, product_list, create_product,
     product_detail, start_purchase, edit_proof, delete_proof, signup, pi_authenticate,
-    pi_withdraw, pi_payment_webhook, mark_shipped, confirm_receipt
+    pi_withdraw, pi_payment_webhook, mark_shipped, confirm_receipt, privacy_policy, terms_of_service
 )
 
 
@@ -75,6 +75,8 @@ urlpatterns = [
     path('login/', custom_login_view, name='login'),    
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('signup/', signup, name='signup'),
+    path('privacy-policy/', privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', terms_of_service, name='terms_of_service'),
 ]
 
 # Servir les fichiers médias en mode DEBUG
