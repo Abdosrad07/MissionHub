@@ -467,7 +467,7 @@ def pi_withdraw(request):
             messages.error(request, 'Le montant doit être positif.')
             return Response({'error': 'Amount must be positive'}, status=400)
     except:
-        messages.error(request, 'Montant invalide')
+        messages.error(request, 'Montant invalide.')
         return Response({'error': 'Invalid amount'}, status=400)
 
     profile = request.user.profile

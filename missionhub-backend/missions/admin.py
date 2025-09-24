@@ -5,7 +5,6 @@ from django.utils import timezone
 from django.utils.html import format_html
 from django.urls import reverse
 from django.contrib import messages
-from django.contrib import messages
 from .models import Mission, Proof, UserProfile, UserSession, Badge, UserBadge, Product, Purchase, Notification
 from .views import release_funds_to_seller
 

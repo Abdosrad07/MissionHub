@@ -6,6 +6,7 @@
     <title>{% block title %}MissionHub{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/pico.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
     <script src="https://sdk.pi-network.com/v2/pi-sdk.js"></script>
     <script>Pi.init({ version: "2.0", sandbox: true })</script>
@@ -14,7 +15,11 @@
     <header class="container">
         <nav>
             <ul>
-                <li><a href="{% url 'list_missions' %}"><strong>MissionHub</strong></a></li>
+                <li>
+                    <a href="{% url 'list_missions' %}" class="brand">
+                        <img src="{% static 'images/logo.png' %}" alt="MissionHub Logo" class="logo"><strong>MissionHub</strong>
+                    </a>
+                </li>
             </ul>
             {% if user.is_authenticated %}
             <ul>

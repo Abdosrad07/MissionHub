@@ -1,0 +1,20 @@
+/* Ce fichier peut être utilisé pour des styles personnalisés qui surchargent Pico.css. */
+
+/* Style pour le logo dans la barre de navigation */
+.brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 0.75rem; /* Espace entre le logo et le texte */
+}
+
+.logo {
+    height: 35px;
+    width: auto;
+}
+
+/* Assurer que le lien de la marque n'a pas de décoration de texte superflue */
+nav ul li > a.brand strong {
+    color: var(--pico-nav-link-color);
+}
+

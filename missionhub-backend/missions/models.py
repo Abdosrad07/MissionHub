@@ -114,7 +114,7 @@ class Proof(models.Model):
     reviewed_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Proof by {self.session.user.username} for {self.session.mission.title}"
+        return f"Preuve de {self.session.user.username} pour {self.session.mission.title}"
 
 class Score(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
