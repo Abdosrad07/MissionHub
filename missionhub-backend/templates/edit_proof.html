@@ -10,11 +10,11 @@
         {% csrf_token %}
         {{ form.as_p }}
         <p>Photo actuelle :</p>
-        {% if proof.photo %}
-            <img src="{{ proof.photo.url }}" alt="Photo de la preuve" class="proof-photo" style="max-width: 300px; height: auto; margin-bottom: 20px;">
+        {% if proof.photo %} 
+            <img src="{{ proof.photo.url }}" alt="Photo de la preuve" style="max-width: 300px; height: auto; margin-bottom: 20px; border-radius: var(--pico-border-radius);">
         {% else %}
             <p>Pas de photo.</p>
         {% endif %}
-        <button type="submit" class="button-primary">Enregistrer les modifications</button>
+        <button type="submit">Enregistrer les modifications</button>
     </form>
 {% endblock %}

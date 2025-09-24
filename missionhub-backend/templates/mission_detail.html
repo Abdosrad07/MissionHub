@@ -16,11 +16,12 @@
 
     <h2>Soumettre une preuve</h2>
     <p>Vous avez démarré cette mission. Vous pouvez maintenant soumettre une preuve de sa réalisation.</p>
-    <a href="{% url 'submit_proof' session.id %}" class="button button-primary">Soumettre une nouvelle preuve</a>
+    <a href="{% url 'submit_proof' session.id %}" role="button">Soumettre une nouvelle preuve</a>
 
     <h2 style="margin-top: 2em;">Vos preuves pour cette mission</h2>
     {% if proofs %}
-        <table class="table-styled">
+        <figure>
+            <table>
             <thead>
                 <tr>
                     <th>Photo</th>
@@ -34,8 +35,8 @@
                 {% for proof in proofs %}
                     <tr>
                         <td>
-                            {% if proof.photo %}
-                                <img src="{{ proof.photo.url }}" alt="Photo de la preuve" class="proof-photo">
+                            {% if proof.photo %} 
+                                <img src="{{ proof.photo.url }}" alt="Photo de la preuve" style="width: 100px; height: auto; border-radius: var(--pico-border-radius);">
                             {% else %}
                                 Pas de photo
                             {% endif %}
@@ -45,10 +46,10 @@
                         <td>{{ proof.submitted_at|date:"d M Y, H:i" }}</td>
                         <td>
                             {% if proof.status == 'pending' %}
-                                <a href="{% url 'edit_proof' proof.id %}">Modifier</a> |
-                                <form action="{% url 'delete_proof' proof.id %}" method="post" style="display:inline;">
+                            <a href="{% url 'edit_proof' proof.id %}" role="button" class="secondary outline" style="margin-right: 0.5rem;">Modifier</a>
+                            <form action="{% url 'delete_proof' proof.id %}" method="post" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette preuve ?');">
                                     {% csrf_token %}
-                                    <button type="submit" class="link-button" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette preuve ?');">Supprimer</button>
+                                    <button type="submit" class="contrast outline">Supprimer</button>
                                 </form>
                             {% else %}
                                 -
@@ -57,7 +58,8 @@
                     </tr>
                 {% endfor %}
             </tbody>
-        </table>
+            </table>
+        </figure>
     {% else %}
         <p>Vous n'avez encore soumis aucune preuve pour cette mission.</p>
     {% endif %}

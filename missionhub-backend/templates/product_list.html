@@ -5,21 +5,22 @@
 {% block content %}
     <h1>Marketplace</h1>
     <p>Découvrez les produits et services proposés par la communauté MissionHub.</p>
-    <a href="{% url 'create_product' %}" class="button-primary">Vendre un produit</a>
+    <a href="{% url 'create_product' %}" role="button">Vendre un produit</a>
     <hr style="margin: 2rem 0;">
 
-    <div class="product-list">
+    <div class="grid">
         {% for product in products %}
-            <div class="product-card">
+            <article>
                 {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
                 {% endif %}
                 <h2>{{ product.name }}</h2>
-                <p class="product-price">{{ product.price }} π</p>
+                <h3>{{ product.price }} π</h3>
                 <p>{{ product.description|truncatewords:20 }}</p>
+                <p><small>Catégorie : {{ product.get_category_display }}</small></p>
                 <p><small>Vendu par : {{ product.seller.profile.pseudo }}</small></p>
-                <a href="{% url 'product_detail' product.id %}" class="button">Voir les détails</a>
-            </div>
+                <a href="{% url 'product_detail' product.id %}" role="button" class="contrast">Voir les détails</a>
+            </article>
         {% empty %}
             <p>Il n'y a aucun produit à vendre pour le moment. Soyez le premier à publier une annonce !</p>
         {% endfor %}

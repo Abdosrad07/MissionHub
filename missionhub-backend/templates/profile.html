@@ -15,8 +15,8 @@
     <div class="profile-section">
         <h2>Portefeuille Pi</h2>
         {% if not user.profile.pi_uid %}
-            <p>Connectez votre compte Pi pour pouvoir retirer vos gains.</p>
-            <button id="pi-auth-button" class="button">Connecter avec Pi</button>
+            <p>Connectez votre compte Pi pour pouvoir retirer vos gains.</p> 
+            <button id="pi-auth-button">Connecter avec Pi</button>
             <p id="pi-message"></p>
         {% else %}
             <p>Votre compte Pi est connecté. Vous pouvez maintenant retirer vos gains.</p>
@@ -26,14 +26,15 @@
         <p>Votre solde : <strong>{{ request.user.profile.solde }} π</strong></p>
         <form id="withdraw-form">
             <input type="number" id="withdraw-amount" name="amount" step="0.0000001" placeholder="Montant à retirer" required>
-            <button type="submit" class="button-primary">Retirer en Pi</button>
+            <button type="submit">Retirer en Pi</button>
         </form>
     </div>
 
     <div class="profile-section">
         <h2>Mes Achats</h2>
         {% if my_purchases %}
-            <table class="table-styled">
+            <figure>
+                <table>
                 <thead>
                     <tr>
                         <th>Produit</th>
@@ -52,9 +53,9 @@
                             <td>{{ purchase.get_status_display }}</td>
                             <td>
                                 {% if purchase.status == 'shipped' %}
-                                    <form action="{% url 'confirm_receipt' purchase.id %}" method="post">
+                                    <form action="{% url 'confirm_receipt' purchase.id %}" method="post" style="margin: 0;">
                                         {% csrf_token %}
-                                        <button type="submit" class="button">Confirmer la réception</button>
+                                        <button type="submit" class="outline">Confirmer la réception</button>
                                     </form>
                                 {% else %}
                                     -
@@ -63,7 +64,9 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-            </table>
+                </table>
+            </figure>
+
         {% else %}
             <p>Vous n'avez effectué aucun achat.</p>
         {% endif %}
@@ -72,7 +75,8 @@
     <div class="profile-section">
         <h2>Mes Ventes</h2>
         {% if my_sales %}
-            <table class="table-styled">
+            <figure>
+                <table>
                 <thead>
                     <tr>
                         <th>Produit</th>
@@ -89,9 +93,9 @@
                             <td>{{ sale.get_status_display }}</td>
                             <td>
                                 {% if sale.status == 'in_escrow' %}
-                                    <form action="{% url 'mark_shipped' sale.id %}" method="post">
+                                    <form action="{% url 'mark_shipped' sale.id %}" method="post" style="margin: 0;">
                                         {% csrf_token %}
-                                        <button type="submit" class="button">Marquer comme expédié</button>
+                                        <button type="submit" class="outline">Marquer comme expédié</button>
                                     </form>
                                 {% else %}
                                     -
@@ -100,7 +104,8 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-            </table>
+                </table>
+            </figure>
         {% else %}
             <p>Vous n'avez réalisé aucune vente.</p>
         {% endif %}

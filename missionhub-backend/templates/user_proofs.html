@@ -5,7 +5,8 @@
 {% block content %}
     <h1>Mes Preuves Soumises</h1>
     <p>Voici la liste de toutes les preuves que vous avez soumises pour les missions.</p>
-    <table class="table-styled">
+    <figure>
+        <table>
         <thead>
             <tr>
                 <th>Mission</th>
@@ -21,7 +22,7 @@
                 <tr>
                     <td>{{ proof.session.mission.title }}</td>
                     <td>
-                        <img src="{{ proof.photo.url }}" alt="Proof Photo" class="proof-photo">
+                        <img src="{{ proof.photo.url }}" alt="Proof Photo" style="width: 100px; height: auto; border-radius: var(--pico-border-radius);">
                     </td>
                     <td>{{ proof.location }}</td>
                     <td>
@@ -32,5 +33,6 @@
                 </tr>
             {% endfor %}
         </tbody>
-    </table>
+        </table>
+    </figure>
 {% endblock %}

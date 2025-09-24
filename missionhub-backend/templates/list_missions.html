@@ -4,18 +4,18 @@
 
 {% block content %}
     <h1>Liste des Missions</h1>
-    <div class="mission-list">
+    <div class="grid">
         {% for mission in missions %}
-            <div class="mission-card">
+                <article>
                 <h2>{{ mission.title }}</h2>
                 <p>{{ mission.description }}</p>
-                <div class="mission-details">
+                <footer>
                     <span><strong>Catégorie :</strong> {{ mission.get_category_display }}</span>
                     <span><strong>Difficulté:</strong> {{ mission.get_difficulty_display }}</span>
                     <span><strong>Récompense:</strong> {{ mission.reward }} π</span>
-                </div>
-                <a href="{% url 'choose_mission' mission.id %}" class="button-primary">Choisir cette mission</a>
-            </div>
+                    <a href="{% url 'choose_mission' mission.id %}" role="button">Choisir cette mission</a>
+                </footer>
+            </article>
         {% endfor %}
     </div>
 {% endblock %}

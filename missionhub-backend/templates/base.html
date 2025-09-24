@@ -5,52 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MissionHub{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pico.min.css' %}">
     
     <script src="https://sdk.pi-network.com/v2/pi-sdk.js"></script>
     <script>Pi.init({ version: "2.0", sandbox: true })</script>
 </head>
 <body>
-    <nav>
-        <div class="nav-links">
-            <a href="{% url 'list_missions' %}"><strong>MissionHub</strong></a>
+    <header class="container">
+        <nav>
+            <ul>
+                <li><a href="{% url 'list_missions' %}"><strong>MissionHub</strong></a></li>
+            </ul>
             {% if user.is_authenticated %}
-                <a href="{% url 'product_list' %}">Marketplace</a>
-                <a href="{% url 'user_proofs' %}">Mes Preuves</a>
-                <a href="{% url 'user_notifications' %}">Notifications</a>
+            <ul>
+                <li><a href="{% url 'product_list' %}">Marketplace</a></li>
+                <li><a href="{% url 'user_proofs' %}">Mes Preuves</a></li>
+                <li><a href="{% url 'user_notifications' %}">Notifications</a></li>
+            </ul>
             {% endif %}
-        </div>
-        <div class="user-info">
-            {% if user.is_authenticated %}
-            {% if user.profile %}
-            <span class="user-greeting">Bonjour, <a href="{% url 'user_profile' %}">{{ user.profile.pseudo }}</a></span>
-            <span class="user-balance">Solde : <strong>{{ user.profile.solde|default:"0.0" }} π</strong></span>
-        {% else %}
-            <span class="user-greeting">Bonjour, {{ user.username }}</span>
-            <span class="user-balance" style="color: red;">Profil manquant !</span>
-        {% endif %}
-            <form action="{% url 'logout' %}" method="post" class="user-logout">
-                {% csrf_token %}
-                <button type="submit" class="link-button">Déconnexion</button>
-            </form>
-            {% else %}
-                <a href="{% url 'login' %}">Connexion</a>
-                <a href="{% url 'signup' %}">Inscription</a>
-            {% endif %}
-        </div>
-    </nav>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li>
+                        <details role="list" dir="rtl">
+                            <summary aria-haspopup="listbox" role="link">
+                                {% if user.profile %}{{ user.profile.pseudo }}{% else %}{{ user.username }}{% endif %}
+                            </summary>
+                            <ul role="listbox">
+                                {% if user.profile %}
+                                <li>
+                                    <a href="{% url 'user_profile' %}">Solde : <strong>{{ user.profile.solde|default:"0.0" }} π</strong></a>
+                                </li>
+                                {% endif %}
+                                <li><a href="{% url 'user_profile' %}">Mon Profil</a></li>
+                                <li>
+                                    <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="contrast">Déconnexion</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </details>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" role="button" class="secondary">Connexion</a></li>
+                    <li><a href="{% url 'signup' %}" role="button">Inscription</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
 
     <main class="container">
         {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
+            {% for message in messages %}
+                <article class="{{ message.tags }}">
+                    {{ message }}
+                </article>
+            {% endfor %}
         {% endif %}
 
         {% block content %}{% endblock %}
     </main>
+
+    <footer class="container">
+        <small>
+            <a href="{% url 'privacy_policy' %}">Politique de confidentialité</a> • 
+            <a href="{% url 'terms_of_service' %}">Conditions d'utilisation</a>
+        </small>
+    </footer>
 
 </body>
 </html>

@@ -10,6 +10,6 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="button-primary">Soumettre ma preuve</button>
+        <button type="submit">Soumettre ma preuve</button>
     </form>
 {% endblock %}

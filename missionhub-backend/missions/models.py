@@ -157,6 +157,16 @@ class Product(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
     name = models.CharField(max_length=255)
     description = models.TextField()
+    category = models.CharField(
+        max_length=50,
+        choices=[
+            ('tourisme', 'Tourisme'),
+            ('artisanat', 'Artisanat'),
+            ('services', 'Services'),
+            ('autre', 'Autre'),
+        ],
+        default='autre'
+    )
     price = models.DecimalField(max_digits=19, decimal_places=7)
     image = models.ImageField(upload_to='products/', blank=True, null=True)
     is_available = models.BooleanField(default=True)
@@ -168,7 +178,7 @@ class Product(models.Model):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price', 'image']
+        fields = ['name', 'description', 'category', 'price', 'image']
 
 class Purchase(models.Model):
     """Représente une transaction d'achat sécurisée (escrow)."""
