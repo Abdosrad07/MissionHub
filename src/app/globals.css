@@ -1,0 +1,332 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── NOC / Signal palette ─────────────────────────────── */
+  --color-noir: #04080f;
+  --color-panel: #0a1220;
+  --color-panel2: #0d1828;
+  --color-line: #1a2c42;
+  --color-line2: #24405e;
+  --color-ink: #e6eef6;
+  --color-muted: #7e93a8;
+  --color-signal: #3ce6a6;
+  --color-signal-soft: #2bb67e;
+  --color-glow: #4ee8ad;
+  --color-freq: #5ea8ff;
+  --color-warn: #ffc857;
+  --color-alert: #ff5d5d;
+
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-noir);
+  color: var(--color-ink);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-noir);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+}
+
+/* Scrollbar sobre, façon console */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 6px;
+  border: 2px solid var(--color-noir);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ── Decorative blueprint grid ─────────────────────────── */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(94, 168, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 168, 255, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.grid-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% -10%, rgba(60, 230, 166, 0.07), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 85% 110%, rgba(94, 168, 255, 0.05), transparent 70%);
+}
+
+/* ── Panels ────────────────────────────────────────────── */
+.panel {
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  border: 1px solid var(--color-line);
+  border-radius: 0.625rem;
+}
+
+/* ── Status LEDs ───────────────────────────────────────── */
+.led {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: currentColor;
+  box-shadow: 0 0 7px currentColor;
+  flex: none;
+}
+.led-pulse {
+  animation: led-pulse 2.2s ease-in-out infinite;
+}
+@keyframes led-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ── Terminal window ───────────────────────────────────── */
+.term {
+  background: #070d16;
+  border: 1px solid var(--color-line);
+  border-radius: 0.625rem;
+  overflow: hidden;
+  box-shadow: 0 24px 70px -32px rgba(0, 0, 0, 0.9);
+}
+.term-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid var(--color-line);
+  background: rgba(13, 24, 40, 0.7);
+}
+
+/* ── Blinking caret ────────────────────────────────────── */
+.caret::after {
+  content: "▌";
+  margin-left: 2px;
+  color: var(--color-signal);
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ── Signal waveform ───────────────────────────────────── */
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 100%;
+}
+.wave span {
+  display: block;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--color-signal);
+  transform-origin: center;
+  animation: wave 1.5s ease-in-out infinite;
+}
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.25); opacity: 0.55; }
+  50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* ── Scanline sweep ────────────────────────────────────── */
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+.scanline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 64px;
+  top: -64px;
+  background: linear-gradient(180deg, transparent, rgba(60, 230, 166, 0.05), transparent);
+  animation: scan 7s linear infinite;
+  pointer-events: none;
+}
+@keyframes scan {
+  0% { top: -64px; }
+  100% { top: 110%; }
+}
+
+/* ══ V2 ── Boutons système ═══════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  padding: 0.72rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  cursor: pointer;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--color-signal);
+  border-color: var(--color-signal);
+  color: var(--color-noir);
+  font-weight: 600;
+  box-shadow: 0 0 0 0 rgba(60, 230, 166, 0);
+}
+.btn-primary:hover {
+  background: var(--color-glow);
+  border-color: var(--color-glow);
+  box-shadow: 0 6px 24px -8px rgba(60, 230, 166, 0.55);
+}
+
+.btn-ghost {
+  background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+  border-color: var(--color-line);
+  color: var(--color-ink);
+}
+.btn-ghost:hover {
+  border-color: var(--color-line2);
+  background: var(--color-panel2);
+}
+
+.btn-accent {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  border-color: currentColor;
+  color: inherit;
+  font-weight: 600;
+}
+.btn-accent:hover {
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  box-shadow: 0 6px 22px -10px currentColor;
+}
+
+/* ══ V2 ── Cadres média (captures & vidéos) ══════════════ */
+.media-frame {
+  position: relative;
+  overflow: hidden;
+  background: #060b13;
+  border: 1px solid var(--color-line);
+  border-radius: 0.625rem;
+  transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.media-frame:hover {
+  border-color: var(--color-line2);
+  box-shadow: 0 22px 60px -28px rgba(0, 0, 0, 0.95);
+}
+.media-frame img,
+.media-frame video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: top;
+}
+.media-frame figcaption {
+  border-top: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-panel) 92%, transparent);
+  padding: 0.6rem 0.9rem;
+}
+
+/* Badge coin d'un média */
+.media-badge {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.3rem;
+  background: rgba(4, 8, 15, 0.82);
+  border: 1px solid var(--color-line2);
+  color: var(--color-ink);
+  backdrop-filter: blur(3px);
+}
+
+/* ══ V2 ── Révélation au scroll (discrète) ═══════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 480ms ease, transform 480ms ease;
+}
+.reveal.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ══ V2 ── Ligne de vie (section personnelle) ════════════ */
+.timeline {
+  position: relative;
+  padding-left: 1.4rem;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.28rem;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  width: 1px;
+  background: linear-gradient(180deg, var(--color-signal), var(--color-line2) 70%, transparent);
+}
+.timeline-item {
+  position: relative;
+}
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -1.4rem;
+  top: 0.5rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-noir);
+  border: 1.5px solid var(--color-signal);
+  box-shadow: 0 0 6px rgba(60, 230, 166, 0.5);
+}
+
+/* ── Respect des préférences de mouvement ──────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .led-pulse, .wave span, .caret::after, .scanline::after {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .btn, .media-frame {
+    transition: none;
+  }
+}
