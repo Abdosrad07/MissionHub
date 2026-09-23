@@ -375,12 +375,11 @@ export const profile = {
   ],
 
   photos: [
-    { src: "/photos_abdourahim/IMG-20260720-WA0029.jpg", alt: "Abdourahim — portrait" },
-    { src: "/photos_abdourahim/IMG_20260730_081348.jpg", alt: "Abdourahim — travail" },
-    { src: "/photos_abdourahim/IMG-20260804-WA0009.jpeg", alt: "Abdourahim — quotidien" },
-    { src: "/photos_abdourahim/IMG_20260813_070943.jpg", alt: "Abdourahim — études" },
-    { src: "/photos_abdourahim/IMG_20260814_111501.jpg", alt: "Abdourahim — project" },
-    { src: "/photos_abdourahim/IMG_20260914_153052.jpg", alt: "Abdourahim — récent" },
+    { src: "/photos_abdourahim/IMG_20260813_070943.jpg", alt: "Abdourahim — devant une baie de serveurs réseau" },
+    { src: "/photos_abdourahim/IMG_20260730_081348.jpg", alt: "Abdourahim — salle serveurs" },
+    { src: "/photos_abdourahim/IMG-20260804-WA0009.jpeg", alt: "Abdourahim — atelier avec équipements" },
+    { src: "/photos_abdourahim/IMG_20260914_153052.jpg", alt: "Abdourahim — en train de construire avec Arduino" },
+    { src: "/photos_abdourahim/IMG_20260814_111501.jpg", alt: "Abdourahim — bureau" },
   ],
 
   stats: {

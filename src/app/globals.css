@@ -556,7 +556,7 @@ button:focus-visible {
   html {
     scroll-behavior: auto;
   }
-  .led-pulse, .wave span, .caret::after, .scanline::after {
+  .led-pulse, .wave span, .caret::after, .scanline::after, .hero-orbit {
     animation: none;
   }
   .reveal {
@@ -587,6 +587,9 @@ button:focus-visible {
   .signal-node {
     gap: 1rem;
   }
+  .hero-orbit-1 { width: 280px; height: 280px; }
+  .hero-orbit-2 { width: 340px; height: 340px; }
+  .hero-orbit-3 { width: 400px; height: 400px; }
 }
 
 /* ══ Page transitions ════════════════════════════════════ */
@@ -604,7 +607,67 @@ main {
   50% { box-shadow: 0 0 24px -4px rgba(0, 229, 199, 0.15); }
 }
 
-/* ══ Horizontal scroll for skills ════════════════════════ */
+/* ══ Hero photo — central network node ══════════════════ */
+.hero-photo-node {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--color-border2);
+  box-shadow:
+    0 0 0 4px var(--color-noir),
+    0 0 0 6px var(--color-signal),
+    0 0 40px -8px rgba(0, 229, 199, 0.25);
+  z-index: 2;
+}
+.hero-photo-node img {
+  border-radius: 0;
+}
+@media (min-width: 640px) {
+  .hero-photo-node {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+/* ══ Hero orbital rings ═════════════════════════════════ */
+.hero-orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid var(--color-signal);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.hero-orbit-1 {
+  width: 320px;
+  height: 320px;
+  opacity: 0.08;
+  animation: orbit-spin 40s linear infinite;
+}
+.hero-orbit-2 {
+  width: 420px;
+  height: 420px;
+  opacity: 0.05;
+  border-style: dashed;
+  animation: orbit-spin 60s linear infinite reverse;
+}
+.hero-orbit-3 {
+  width: 520px;
+  height: 520px;
+  opacity: 0.03;
+  animation: orbit-spin 80s linear infinite;
+}
+@keyframes orbit-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-orbit { animation: none; }
+}
+
+/* ══ Horizontal scroll for skills ══════════════════════ */
 .skills-scroll {
   display: flex;
   flex-wrap: wrap;

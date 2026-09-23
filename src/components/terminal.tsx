@@ -50,21 +50,26 @@ export function Waveform({
   );
 }
 
-/** Section heading — editorial style with signal accent. */
+/** Section heading — editorial style, no terminal decoration. */
 export function SectionHeading({
-  cmd,
+  label,
   title,
   level = 2,
 }: {
-  cmd: string;
+  label: string;
   title: string;
   level?: 2 | 3;
 }) {
   const Tag = level === 2 ? "h2" : "h3";
   return (
     <div className="mb-8">
-      <p className="font-mono text-xs tracking-widest text-signal">$ {cmd}</p>
-      <Tag className="mt-2 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-none bg-signal/40" style={{ width: "1.5rem" }} />
+        <p className="font-mono text-[10px] tracking-[0.2em] text-signal/70 uppercase">
+          {label}
+        </p>
+      </div>
+      <Tag className="mt-3 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
         {title}
       </Tag>
     </div>

@@ -2,14 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { ProjectCard } from "@/components/project-card";
 import { Reveal } from "@/components/reveal";
-import { SectionHeading, Terminal, Waveform } from "@/components/terminal";
+import { SectionHeading, Waveform } from "@/components/terminal";
 import { SignalNode } from "@/components/signal-node";
 import { PhotoFrame } from "@/components/photo-frame";
 import { SkillMap } from "@/components/skill-map";
-import {
-  ArrowUpRight,
-  GitHubIcon,
-} from "@/components/icons";
+import { ArrowUpRight, GitHubIcon } from "@/components/icons";
 import { projects } from "@/data/projects";
 import { profile } from "@/data/profile";
 
@@ -17,36 +14,64 @@ export default function HomePage() {
   return (
     <main>
       {/* ════════════════════════════════════════════════════
-          1. HERO — THE SIGNAL BEGINS
+          1. HERO — THE PERSON AT THE CENTER
          ════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden">
+        {/* Subtle radial glow behind the photo */}
+        <div className="pointer-events-none absolute left-1/2 top-32 -z-10 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-signal/[0.04] blur-[120px] max-lg:hidden" />
+
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-28 sm:px-6 sm:pt-36 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-12">
           <div>
             <Reveal>
               <p className="font-mono text-xs tracking-widest text-signal">
-                {"// ÉTUDIANT INGÉNIEUR · TÉLÉCOMMUNICATIONS · RÉSEAU → CLOUD"}
+                ÉTUDIANT INGÉNIEUR · TÉLÉCOMMUNICATIONS
               </p>
             </Reveal>
 
             <Reveal delay={60}>
               <h1 className="mt-5 font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-[3.4rem]">
-                Le signal traverse
+                <span className="text-ink">Abdourahim</span>
                 <br />
-                <span className="text-signal">les couches.</span>
+                <span className="text-muted text-[0.65em]">
+                  Construit l&apos;ingénieur
+                </span>
+                <br />
+                <span className="text-signal">qu&apos;il veut devenir.</span>
               </h1>
             </Reveal>
 
             <Reveal delay={120}>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-                {profile.origin}
+                Étudiant en télécommunications à{" "}
+                <span className="text-ink">SUP&apos;PTIC Yaoundé</span>.
+                Mon parcours va des réseaux au cloud — en passant par le
+                software, l&apos;automatisation et l&apos;IA.
               </p>
             </Reveal>
 
+            {/* Progression chain — the signal path */}
             <Reveal delay={180}>
-              <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted">
-                Quatre projets réels. Des réseaux au cloud. Chaque étape est un
-                nœud dans un parcours qui se construit.
-              </p>
+              <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[11px] tracking-wider">
+                {[
+                  { label: "NETWORK", color: "#00e5c7" },
+                  { label: "LINUX", color: "#34d399" },
+                  { label: "PYTHON", color: "#60a5fa" },
+                  { label: "AUTOMATION", color: "#f59e0b" },
+                  { label: "AI", color: "#f472b6" },
+                  { label: "CLOUD", color: "#a78bfa" },
+                ].map((item, i, arr) => (
+                  <span key={item.label} className="flex items-center gap-2">
+                    <span style={{ color: item.color }}>{item.label}</span>
+                    {i < arr.length - 1 && (
+                      <span className="text-border2">→</span>
+                    )}
+                  </span>
+                ))}
+                <span className="ml-1 flex items-center gap-2">
+                  <span className="text-border2">→</span>
+                  <span className="font-semibold text-signal">NETDEVOPS</span>
+                </span>
+              </div>
             </Reveal>
 
             <Reveal delay={240}>
@@ -68,63 +93,51 @@ export default function HomePage() {
             </Reveal>
           </div>
 
-          {/* Hero visual — VoiceOps terminal demo */}
+          {/* Hero photo — integrated as a network node */}
           <Reveal delay={100}>
-            <div className="mt-10 lg:mt-0">
-              <Terminal title="voiceops — session@live" className="scanline">
-                <div className="space-y-1.5 overflow-x-auto font-mono text-[11.5px] leading-relaxed sm:text-[13px]">
-                  <p className="text-muted">$ voiceops --listen</p>
-                  <p>
-                    <span className="text-freq">[STT]&nbsp;&nbsp;&nbsp;</span>
-                    <span className="text-ink">
-                      « Le PC du bureau 204 n&apos;a plus accès au réseau. »
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-signal">[AGENT]&nbsp;</span>
-                    <span className="text-muted">
-                      La connexion Ethernet est-elle active ?
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-freq">[USER]&nbsp;&nbsp;</span>
-                    <span className="text-muted">
-                      Oui. Adresse 169.254.14.23.
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-warn">[TOOL]&nbsp;&nbsp;</span>
-                    <span className="text-muted">
-                      check_ip(pc-b204) → APIPA détectée
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-warn">[TOOL]&nbsp;&nbsp;</span>
-                    <span className="text-muted">
-                      check_vlan(pc-b204) → VLAN 10 · attendu : 20
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-signal">[AGENT]&nbsp;</span>
-                    <span className="text-muted">
-                      Cause probable : configuration VLAN incorrecte.
-                    </span>
-                  </p>
-                  <p>
-                    <span className="text-alert">[REPORT]&nbsp;</span>
-                    <span className="text-muted">
-                      INCIDENT #VO-001 — sévérité : medium
-                    </span>
-                  </p>
-                  <p className="caret pt-1 text-signal">$&nbsp;</p>
-                </div>
-              </Terminal>
-              <div className="mt-3 h-8 opacity-60">
-                <Waveform bars={48} />
+            <div className="relative mt-12 flex justify-center lg:mt-0">
+              {/* Orbital rings */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden>
+                <div className="hero-orbit hero-orbit-1" />
+                <div className="hero-orbit hero-orbit-2" />
+                <div className="hero-orbit hero-orbit-3" />
               </div>
-              <p className="mt-1.5 text-right font-mono text-[10px] tracking-widest text-muted">
-                SESSION REJOUÉE — SCÉNARIO DÉMO VOICEOPS
-              </p>
+
+              {/* Connection lines radiating from photo */}
+              <div className="pointer-events-none absolute inset-0" aria-hidden>
+                <svg className="h-full w-full" viewBox="0 0 400 400" fill="none">
+                  <line x1="200" y1="80" x2="200" y2="0" stroke="var(--color-signal)" strokeOpacity="0.15" strokeWidth="1" />
+                  <line x1="200" y1="320" x2="200" y2="400" stroke="var(--color-signal)" strokeOpacity="0.15" strokeWidth="1" />
+                  <line x1="80" y1="200" x2="0" y2="200" stroke="var(--color-freq)" strokeOpacity="0.12" strokeWidth="1" />
+                  <line x1="320" y1="200" x2="400" y2="200" stroke="var(--color-freq)" strokeOpacity="0.12" strokeWidth="1" />
+                  <line x1="115" y1="115" x2="30" y2="30" stroke="var(--color-warn)" strokeOpacity="0.08" strokeWidth="1" />
+                  <line x1="285" y1="285" x2="370" y2="370" stroke="var(--color-warn)" strokeOpacity="0.08" strokeWidth="1" />
+                  {/* Small node dots at endpoints */}
+                  <circle cx="200" cy="0" r="3" fill="var(--color-signal)" fillOpacity="0.4" />
+                  <circle cx="200" cy="400" r="3" fill="var(--color-signal)" fillOpacity="0.4" />
+                  <circle cx="0" cy="200" r="3" fill="var(--color-freq)" fillOpacity="0.3" />
+                  <circle cx="400" cy="200" r="3" fill="var(--color-freq)" fillOpacity="0.3" />
+                  <circle cx="30" cy="30" r="2.5" fill="var(--color-warn)" fillOpacity="0.3" />
+                  <circle cx="370" cy="370" r="2.5" fill="var(--color-warn)" fillOpacity="0.3" />
+                </svg>
+              </div>
+
+              {/* Central node — the photo */}
+              <div className="hero-photo-node">
+                <Image
+                  src="/photos_abdourahim/IMG_20260813_070943.jpg"
+                  alt="Abdourahim devant un baie de serveurs réseau"
+                  fill
+                  sizes="(max-width: 1024px) 260px, 300px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+
+              {/* Node label */}
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg border border-border bg-surface/90 px-4 py-2 font-mono text-[10px] tracking-widest text-muted backdrop-blur-sm">
+                YAOUNDÉ · SUP&apos;PTIC · RÉSEAU
+              </div>
             </div>
           </Reveal>
         </div>
@@ -157,7 +170,7 @@ export default function HomePage() {
          ════════════════════════════════════════════════════ */}
       <section id="origine" className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="cat origin.story" title="L'origine" />
+          <SectionHeading label="ORIGINE" title="L'origine" />
         </Reveal>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
@@ -190,8 +203,8 @@ export default function HomePage() {
           <Reveal delay={80}>
             <div className="relative">
               <PhotoFrame
-                src={profile.photos[0].src}
-                alt={profile.photos[0].alt}
+                src={profile.photos[1].src}
+                alt={profile.photos[1].alt}
                 className="mx-auto max-w-sm"
               />
               <div className="absolute -bottom-4 -right-4 rounded-lg border border-border bg-surface px-4 py-2 font-mono text-[10px] tracking-widest text-muted sm:right-4">
@@ -207,7 +220,7 @@ export default function HomePage() {
          ════════════════════════════════════════════════════ */}
       <section id="parcours" className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="trace --path signal" title="Le parcours" />
+          <SectionHeading label="PARCOURS" title="Le parcours" />
         </Reveal>
 
         <Reveal>
@@ -238,12 +251,12 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          5. PROJECTS — EDITORIAL PRESENTATION
+          5. PROJECTS — STEPS IN MY EVOLUTION
          ════════════════════════════════════════════════════ */}
       <section id="projets" className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-24 sm:px-6">
         <Reveal>
           <div className="flex items-end justify-between gap-4">
-            <SectionHeading cmd="ls ~/projects --all" title="Les projets" />
+            <SectionHeading label="PROJETS" title="Les projets" />
             <Link
               href="/projects"
               className="mb-1 hidden items-center gap-1.5 font-mono text-[11px] tracking-widest text-signal transition-colors hover:text-glow sm:flex"
@@ -256,7 +269,7 @@ export default function HomePage() {
 
         <Reveal>
           <p className="mb-8 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
-            Chaque projet est une étape de mon parcours. Pas des cartes
+            Chaque projet est une étape de mon évolution. Pas des cartes
             isolées — des nœuds connectés qui construisent progressivement mon
             profil.
           </p>
@@ -278,11 +291,72 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          6. SKILLS — VISUAL COMPETENCE MAP
+          6. VOICEOPS — THE CONVERGENCE MOMENT
+         ════════════════════════════════════════════════════ */}
+      <section className="border-y border-border bg-surface/30">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <Reveal>
+            <SectionHeading label="CONVERGENCE" title="VoiceOps" />
+          </Reveal>
+
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+            <Reveal>
+              <div>
+                <p className="text-base leading-relaxed text-muted sm:text-lg">
+                  VoiceOps représente un moment de convergence dans mon
+                  parcours.{" "}
+                  <span className="text-ink">
+                    Network + Python + AI + Voice + Automation + Software
+                  </span>{" "}
+                  — tout se connecte dans un seul projet.
+                </p>
+                <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
+                  Un assistant vocal qui diagnostic les problèmes réseau. Pas
+                  une démo technique — une vision de la direction vers laquelle
+                  je me dirige :{" "}
+                  <span className="text-signal">
+                    des opérations réseau de plus en plus automatisées et
+                    intelligentes.
+                  </span>
+                </p>
+
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Voice AI", "Tool calling", "RAG", "FastAPI", "AssemblyAI", "Automation"].map((s) => (
+                    <span key={s} className="skill-tag skill-tag-signal">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="mt-6 font-mono text-[11px] leading-relaxed tracking-wide text-muted">
+                  {"// Pas une expertise professionnelle déjà acquise — une direction en construction."}
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={80}>
+              <div className="relative">
+                <PhotoFrame
+                  src={profile.photos[2].src}
+                  alt={profile.photos[2].alt}
+                  className="mx-auto max-w-sm"
+                  aspect="4/5"
+                />
+                <div className="absolute -bottom-4 left-4 rounded-lg border border-border bg-surface px-4 py-2 font-mono text-[10px] tracking-widest text-muted sm:left-auto sm:right-4">
+                  CONVERGENCE · EN CONSTRUCTION
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════
+          7. SKILLS — COMPETENCE MAP
          ════════════════════════════════════════════════════ */}
       <section id="competences" className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="map --skills" title="Compétences" />
+          <SectionHeading label="COMPÉTENCES" title="Ce que je maîtrise" />
         </Reveal>
 
         <Reveal>
@@ -352,11 +426,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          7. CERTIFICATIONS
+          8. CERTIFICATIONS
          ════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="cat certifications.log" title="Certifications" />
+          <SectionHeading label="CERTIFICATIONS" title="Certifications" />
         </Reveal>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -382,11 +456,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          8. HACKATHONS — MOMENTS OF LEARNING
+          9. HACKATHONS — MOMENTS OF LEARNING
          ════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="grep hackathon history.log" title="Hackathons" />
+          <SectionHeading label="HACKATHONS" title="Hackathons" />
         </Reveal>
 
         <Reveal>
@@ -433,13 +507,13 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          9. CURRENTLY BUILDING — SYSTEM IN MOTION
+          10. CURRENTLY — SYSTEM IN MOTION
          ════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
         <Reveal>
           <SectionHeading
-            cmd="watch --current"
-            title="En ce moment"
+            label="EN CE MOMENT"
+            title="Ce que j'apprends"
           />
         </Reveal>
 
@@ -465,11 +539,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          10. DIRECTION — NETDEVOPS × CLOUD
+          11. DIRECTION — NETDEVOPS × CLOUD
          ════════════════════════════════════════════════════ */}
       <section id="direction" className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="route --destination" title="La direction" />
+          <SectionHeading label="DIRECTION" title="La direction" />
         </Reveal>
 
         <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
@@ -525,8 +599,8 @@ export default function HomePage() {
           <Reveal delay={80}>
             <div className="relative">
               <PhotoFrame
-                src={profile.photos[4].src}
-                alt={profile.photos[4].alt}
+                src={profile.photos[3].src}
+                alt={profile.photos[3].alt}
                 className="mx-auto max-w-sm"
                 aspect="3/4"
               />
@@ -536,11 +610,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          11. INTERNATIONAL HORIZON
+          12. INTERNATIONAL HORIZON
          ════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="ping --horizon" title="Horizon international" />
+          <SectionHeading label="HORIZON" title="Horizon international" />
         </Reveal>
 
         <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
@@ -594,11 +668,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          12. SOFT SKILLS — DEMONSTRATED THROUGH STORIES
+          13. SOFT SKILLS
          ════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="whoami --qualities" title="Qualités" />
+          <SectionHeading label="QUALITÉS" title="Qualités" />
         </Reveal>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -618,11 +692,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          13. DREAMS — PERSONAL & CONTEMPLATIVE
+          14. DREAMS
          ════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="cat dreams.txt" title="Mes rêves" />
+          <SectionHeading label="RÊVES" title="Mes rêves" />
         </Reveal>
 
         <Reveal>
@@ -649,11 +723,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          14. PHOTOS — HUMAN MOMENTS
+          15. PHOTOS — HUMAN MOMENTS
          ════════════════════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="gallery --personnel" title="Quelques moments" />
+          <SectionHeading label="MOMENTS" title="Quelques moments" />
         </Reveal>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
@@ -670,11 +744,11 @@ export default function HomePage() {
       </section>
 
       {/* ════════════════════════════════════════════════════
-          15. CONTACT — OPEN CHANNEL
+          16. CONTACT — OPEN CHANNEL
          ════════════════════════════════════════════════════ */}
       <section id="contact" className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-24 pb-12 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="ping abdosrad" title="Canal ouvert" />
+          <SectionHeading label="CONTACT" title="Canal ouvert" />
         </Reveal>
 
         <Reveal>

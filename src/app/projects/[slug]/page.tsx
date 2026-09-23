@@ -239,7 +239,7 @@ export default async function ProjectPage({
       {/* ══ FULL DESCRIPTION ═══════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
         <Reveal>
-          <SectionHeading cmd={`man ${project.slug}`} title="Le projet" />
+          <SectionHeading label="PROJET" title="Le projet" />
         </Reveal>
         <Reveal>
           <div className="panel space-y-5 p-6 sm:p-8">
@@ -300,7 +300,7 @@ export default async function ProjectPage({
       {/* ══ FEATURES ═══════════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="cat features.md" title="Fonctionnalités" />
+          <SectionHeading label="FONCTIONNALITÉS" title="Fonctionnalités" />
         </Reveal>
         <div className="grid gap-4 sm:grid-cols-2">
           {project.features.map((f, i) => (
@@ -341,7 +341,7 @@ export default async function ProjectPage({
       {/* ══ TECHNOLOGIES ═══════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="dpkg --list" title="Technologies" />
+          <SectionHeading label="TECHNOLOGIES" title="Technologies" />
         </Reveal>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {project.stack.map((g, i) => (
@@ -366,7 +366,7 @@ export default async function ProjectPage({
       {/* ══ MEDIA GALLERY ══════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="open ./captures" title="Captures" />
+          <SectionHeading label="CAPTURES" title="Captures" />
         </Reveal>
         {project.media.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -425,7 +425,7 @@ export default async function ProjectPage({
       {/* ══ SKILLS LEARNED ═════════════════════════════════ */}
       <section className="mx-auto max-w-6xl px-4 pt-20 sm:px-6">
         <Reveal>
-          <SectionHeading cmd="tail -f competences.log" title="Ce que j&apos;ai appris" />
+          <SectionHeading label="APPRENTISSAGES" title="Ce que j&apos;ai appris" />
         </Reveal>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {project.skills.map((s, i) => (
